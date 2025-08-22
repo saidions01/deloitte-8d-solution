@@ -1,10 +1,28 @@
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useFieldArray } from "react-hook-form";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Plus, Trash2 } from "lucide-react";
 import { EightDFormData } from "../EightDForm";
 
 export function D1TeamSetup() {
-  const { register, formState: { errors } } = useFormContext<EightDFormData>();
+  const { register, control, formState: { errors } } = useFormContext<EightDFormData>();
+  
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "teamMembers",
+  });
+
+  const addTeamMember = () => {
+    append({ name: "", role: "", title: "", contact: "" });
+  };
+
+  const removeTeamMember = (index: number) => {
+    if (fields.length > 1) {
+      remove(index);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -15,66 +33,111 @@ export function D1TeamSetup() {
         </p>
       </div>
 
-      <div className="grid gap-6">
-        <div className="space-y-2">
-          <Label htmlFor="teamMembers" className="text-sm font-medium">
-            Names of the team members *
-          </Label>
-          <Textarea
-            id="teamMembers"
-            placeholder="Enter the names of all team members..."
-            {...register("teamMembers", { required: "Team members are required" })}
-            className={errors.teamMembers ? "border-destructive" : ""}
-          />
-          {errors.teamMembers && (
-            <p className="text-sm text-destructive">{errors.teamMembers.message}</p>
-          )}
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <Label className="text-sm font-medium">Team Members *</Label>
+          <Button
+            type="button"
+            onClick={addTeamMember}
+            size="sm"
+            className="bg-success text-success-foreground hover:bg-success/90"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Team Member
+          </Button>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="teamRoles" className="text-sm font-medium">
-            Role of each one in the team *
-          </Label>
-          <Textarea
-            id="teamRoles"
-            placeholder="Describe the role of each team member..."
-            {...register("teamRoles", { required: "Team roles are required" })}
-            className={errors.teamRoles ? "border-destructive" : ""}
-          />
-          {errors.teamRoles && (
-            <p className="text-sm text-destructive">{errors.teamRoles.message}</p>
-          )}
+        <div className="border rounded-lg overflow-hidden">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50">
+                <TableHead className="font-medium">Name *</TableHead>
+                <TableHead className="font-medium">Role *</TableHead>
+                <TableHead className="font-medium">Job Title *</TableHead>
+                <TableHead className="font-medium">Contact *</TableHead>
+                <TableHead className="w-16"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {fields.map((field, index) => (
+                <TableRow key={field.id}>
+                  <TableCell className="p-2">
+                    <Input
+                      placeholder="Enter name..."
+                      {...register(`teamMembers.${index}.name`, { 
+                        required: "Name is required" 
+                      })}
+                      className={errors.teamMembers?.[index]?.name ? "border-destructive" : ""}
+                    />
+                    {errors.teamMembers?.[index]?.name && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.teamMembers[index]?.name?.message}
+                      </p>
+                    )}
+                  </TableCell>
+                  <TableCell className="p-2">
+                    <Input
+                      placeholder="Enter role..."
+                      {...register(`teamMembers.${index}.role`, { 
+                        required: "Role is required" 
+                      })}
+                      className={errors.teamMembers?.[index]?.role ? "border-destructive" : ""}
+                    />
+                    {errors.teamMembers?.[index]?.role && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.teamMembers[index]?.role?.message}
+                      </p>
+                    )}
+                  </TableCell>
+                  <TableCell className="p-2">
+                    <Input
+                      placeholder="Enter job title..."
+                      {...register(`teamMembers.${index}.title`, { 
+                        required: "Title is required" 
+                      })}
+                      className={errors.teamMembers?.[index]?.title ? "border-destructive" : ""}
+                    />
+                    {errors.teamMembers?.[index]?.title && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.teamMembers[index]?.title?.message}
+                      </p>
+                    )}
+                  </TableCell>
+                  <TableCell className="p-2">
+                    <Input
+                      placeholder="Email or phone..."
+                      {...register(`teamMembers.${index}.contact`, { 
+                        required: "Contact is required" 
+                      })}
+                      className={errors.teamMembers?.[index]?.contact ? "border-destructive" : ""}
+                    />
+                    {errors.teamMembers?.[index]?.contact && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.teamMembers[index]?.contact?.message}
+                      </p>
+                    )}
+                  </TableCell>
+                  <TableCell className="p-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeTeamMember(index)}
+                      disabled={fields.length === 1}
+                      className="h-8 w-8 p-0"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="teamTitles" className="text-sm font-medium">
-            Post-Work title of each one *
-          </Label>
-          <Textarea
-            id="teamTitles"
-            placeholder="Enter the job title of each team member..."
-            {...register("teamTitles", { required: "Team titles are required" })}
-            className={errors.teamTitles ? "border-destructive" : ""}
-          />
-          {errors.teamTitles && (
-            <p className="text-sm text-destructive">{errors.teamTitles.message}</p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="teamContacts" className="text-sm font-medium">
-            Contact of each one *
-          </Label>
-          <Textarea
-            id="teamContacts"
-            placeholder="Enter contact information for each team member (email, phone)..."
-            {...register("teamContacts", { required: "Team contacts are required" })}
-            className={errors.teamContacts ? "border-destructive" : ""}
-          />
-          {errors.teamContacts && (
-            <p className="text-sm text-destructive">{errors.teamContacts.message}</p>
-          )}
-        </div>
+        {fields.length === 0 && (
+          <p className="text-sm text-destructive">At least one team member is required.</p>
+        )}
       </div>
     </div>
   );

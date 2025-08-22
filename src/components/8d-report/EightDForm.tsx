@@ -14,12 +14,16 @@ import { D7Prevention } from "./steps/D7Prevention";
 import { D8Conclusion } from "./steps/D8Conclusion";
 import { NextSteps } from "./steps/NextSteps";
 
+export interface TeamMember {
+  name: string;
+  role: string;
+  title: string;
+  contact: string;
+}
+
 export interface EightDFormData {
   // D1 - Team Setup
-  teamMembers: string;
-  teamRoles: string;
-  teamTitles: string;
-  teamContacts: string;
+  teamMembers: TeamMember[];
   
   // D3 - Temporary Remedies
   remedyName: string;
@@ -92,6 +96,7 @@ export function EightDForm() {
   const methods = useForm<EightDFormData>({
     mode: "onChange",
     defaultValues: {
+      teamMembers: [{ name: "", role: "", title: "", contact: "" }],
       preventionCompleted: false,
       temporaryMeasuresRemoved: false,
     }
