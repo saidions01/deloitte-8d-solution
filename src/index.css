@@ -8,26 +8,37 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Deloitte Brand Colors */
+    --deloitte-navy: 215 100% 23%;     /* #002776 */
+    --deloitte-green: 76 100% 42%;     /* #92d400 */
+    --deloitte-blue: 196 100% 44%;     /* #00a1de */
+    --deloitte-black: 0 0% 0%;         /* #000000 */
+    --deloitte-white: 0 0% 100%;       /* #ffffff */
+    
+    /* Design System using Deloitte colors */
+    --background: var(--deloitte-white);
+    --foreground: var(--deloitte-black);
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: var(--deloitte-white);
+    --card-foreground: var(--deloitte-black);
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: var(--deloitte-white);
+    --popover-foreground: var(--deloitte-black);
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: var(--deloitte-navy);
+    --primary-foreground: var(--deloitte-white);
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 215 20% 95%;
+    --secondary-foreground: var(--deloitte-navy);
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 215 10% 96%;
+    --muted-foreground: 215 10% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: var(--deloitte-blue);
+    --accent-foreground: var(--deloitte-white);
+
+    --success: var(--deloitte-green);
+    --success-foreground: var(--deloitte-black);
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
