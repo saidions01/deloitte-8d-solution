@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    allowedHosts : ["deloitte-8d-solution.onrender.com"],
   },
   plugins: [
     react(),
