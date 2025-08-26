@@ -120,51 +120,79 @@ export function EightDForm() {
     }
   };
 
-  const onSubmit = async (data: EightDFormData) => {
-    setIsSubmitting(true);
-    
-    try {
-      // Here you would integrate with Google Sheets API
-      // For now, we'll simulate the submission
-      console.log("8D Report Data:", data);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      toast({
-        title: "Report Submitted Successfully",
-        description: "Your 8D report has been saved to Google Sheets.",
-      });
-      
-      // Reset form
-      methods.reset();
-      setCurrentStep(0);
-      
-    } catch (error) {
-      toast({
-        title: "Submission Failed",
-        description: "There was an error submitting your report. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
+const onSubmit = async (data: EightDFormData) => {
+  setIsSubmitting(true);
+
+  try {
+    const response = await fetch("http://localhost:5000/api/report", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to save report");
     }
-  };
+
+    toast({
+      title: "Report Submitted Successfully",
+      description: "Your 8D report has been saved to Google Sheets.",
+    });
+
+    methods.reset();
+    setCurrentStep(0);
+  } catch (error) {
+    toast({
+      title: "Submission Failed",
+      description: "Error saving report to Google Sheets.",
+      variant: "destructive",
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-primary text-primary-foreground py-8">
-        <div className="container max-w-4xl">
-          <div className="flex items-center gap-3 mb-4">
-            <FileText className="h-8 w-8" />
-            <h1 className="text-3xl font-bold">8D Report</h1>
-          </div>
-          <p className="text-primary-foreground/80">
-            Eight Disciplines Problem Solving Method
-          </p>
-        </div>
+<header className="bg-gradient-to-r from-primary to-primary/90 text-primary-foreground py-10 shadow-lg">
+  <div className="container max-w-5xl px-4">
+    <div className="flex items-center gap-4 mb-4">
+     
+      <div>
+        <h1 className="text-4xl font-extrabold tracking-tight">
+          8D Report
+        </h1>
+        <p className="text-lg text-primary-foreground/80">
+          Eight Disciplines Problem-Solving Report
+        </p>
       </div>
+    </div>
+
+    {/* Description */}
+    <p className="text-sm md:text-base text-primary-foreground/80 max-w-3xl leading-relaxed mb-4">
+      The 8D method is a structured approach to identify, 
+      correct, and eliminate recurring problems. Use this report to document 
+      your team’s actions, validate solutions, and ensure long-term prevention.
+    </p>
+
+    {/* Meta Info */}
+    <div className="flex flex-wrap gap-6 text-xs md:text-sm text-primary-foreground/70">
+      <div className="flex items-center gap-2">
+       
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="font-semibold">@Deloitte</span>
+      </div>
+   
+    </div>
+  </div>
+</header>
+
 
       <div className="container max-w-4xl py-8">
         {/* Progress */}
