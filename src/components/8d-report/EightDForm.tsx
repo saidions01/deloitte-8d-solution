@@ -124,7 +124,7 @@ const onSubmit = async (data: EightDFormData) => {
   setIsSubmitting(true);
 
   try {
-    const response = await fetch("https://eightd-report-backend.onrender.com/api/report", {
+    const response = await fetch("8-d-report-backend-isf7gw1gu-ons-s-projects-25792459.vercel.app/api/report", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
